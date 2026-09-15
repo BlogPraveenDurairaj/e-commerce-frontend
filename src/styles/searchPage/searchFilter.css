@@ -17,7 +17,6 @@
     width: 100%;
     background: white;
     display: none;
-    height: 0;
 }
 
 .search_form input,
@@ -152,19 +151,16 @@
 
         100% {
             width: 800px;
-            height: 68px;
         }
     }
 
     @keyframes expandPrimarySearchShrink {
         0% {
             width: 800px;
-            height: 68px;
         }
 
         100% {
             width: 0;
-            height: 0;
         }
     }
 

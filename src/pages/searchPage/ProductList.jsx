@@ -45,7 +45,7 @@ const ProductList = ({ productList }) => {
               <div className='product_price'>${price}</div>
               <div className='product_cart_buttons_Wrapper'>
                 <Button label={'View Product'} type='link' to={`/product/${id}`} style={'secondary'} />
-                <Button label={isCardItem ? "go to cart" : 'Add to card'} Icon={ProductCartSvgIcon} IconSize={18} buttonAction={() => handleAddToCart(item, isCardItem)} />
+                <Button label={isCardItem ? "Go to cart" : 'Add to card'} Icon={ProductCartSvgIcon} IconSize={18} buttonAction={() => handleAddToCart(item, isCardItem)} />
               </div>
             </div>
           )
