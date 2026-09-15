@@ -1,0 +1,35 @@
+.primary_button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+    font-weight: 500;
+    background: var(--theme-primary);
+    padding: 9px 20px;
+    color: white;
+    border-radius: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    border: 2px solid transparent;
+}
+
+.secondary_button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+    font-weight: 500;
+    background: white;
+    padding: 8px 20px;
+    border: 2px solid transparent;
+    color: var(--theme-primary);
+    border-radius: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+
+    background:
+        linear-gradient(white, white) padding-box,
+        var(--theme-primary) border-box;
+}

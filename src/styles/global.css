@@ -1,0 +1,22 @@
+@import url('./component/index.css');
+@import url('./skeleton/index.css');
+@import url('./loginAndSignUp/loginAndSignUp.css');
+@import url('./searchPage/index.css');
+@import url('./previewPage/index.css');
+@import url('./cartPage/index.css');
+
+:root {
+    --theme-primary: linear-gradient(to right, #259417 0%, #15bb4d 50%, #007d16 100%);
+}
+
+.container {
+    max-width: 1320px;
+    margin-inline: auto;
+    padding: 30px 20px;
+}
+
+.common_Input {
+    padding: 10px 12px;
+    border: 1px solid #bbb2b2;
+    border-radius: 10px;
+}

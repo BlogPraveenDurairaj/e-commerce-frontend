@@ -1,0 +1,81 @@
+.product-skeleton {
+  padding: 13px;
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.skeleton {
+  background: #ebebeb;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Image */
+.skeleton-image {
+  width: 100%;
+  height: 150px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+/* Category */
+.skeleton-category {
+  width: 110px;
+  height: 24px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+
+/* Title */
+.skeleton-title {
+  width: 90%;
+  height: 15px;
+  border-radius: 5px;
+  margin-bottom: 7px;
+}
+
+.skeleton-title.short {
+  width: 60%;
+  margin-bottom: 12px;
+}
+
+/* Rating */
+.skeleton-rating {
+  width: 80px;
+  height: 14px;
+  border-radius: 5px;
+  margin-bottom: 14px;
+}
+
+/* Price */
+.skeleton-price {
+  width: 70px;
+  height: 20px;
+  border-radius: 5px;
+  margin-bottom: 17px;
+}
+
+/* Button */
+.skeleton-button {
+  width: 100%;
+  height: 36px;
+  border-radius: 10px;
+}
+
+/* Airbnb-like subtle animation */
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.55;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+.product_list_grid.container{
+  padding: 0 20px;
+}
