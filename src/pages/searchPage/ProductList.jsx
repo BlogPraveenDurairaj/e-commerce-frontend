@@ -30,18 +30,17 @@ const ProductList = ({ productList }) => {
       <h2>Discover Products</h2>
       <div className='product_list_grid'>
         {productList.map((item) => {
-          const { id, title, price, category, image, rating } = item
+          const { id, title, price, category, image, rating_count, rating_rate } = item
           const isCardItem = cart.cartData.some((el) => el.id == id)
           return (
             <div className='product_card' key={id}>
               <div className='product_card_image_wrapper'>
                 <img src={image} alt={title} />
                 <button className='wishList_button'> <HearSvgIcon /></button>
-
               </div>
               <div className='product_category'>{category}</div>
               <div className='product_title' title={title}>{title}</div>
-              {rating?.rate && <div className='product_rating'><StarSvgIcon /><div>{rating.rate} ({rating.count})</div></div>}
+              {rating_rate && <div className='product_rating'><StarSvgIcon /><div>{rating_rate} ({rating_count})</div></div>}
               <div className='product_price'>${price}</div>
               <div className='product_cart_buttons_Wrapper'>
                 <Button label={'View Product'} type='link' to={`/product/${id}`} style={'secondary'} />
