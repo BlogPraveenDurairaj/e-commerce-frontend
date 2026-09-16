@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { HearSvgIcon, ProductCartSvgIcon, StarSvgIcon } from '../../assets/svgComponent/SvgIcon1'
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/UI/Button'
 import { useDispatch, useSelector } from 'react-redux';
 import { handleCartAdd } from '../../slice/productSlice';
+import { addWishListItem, deleteWishlistItem, getWishlistData } from '../../slice/wishlistSlice';
+import cx from 'classnames'
 
 const ProductList = ({ productList }) => {
   const { cart } = useSelector((state) => state.products)
-  const { isAuthenticated } = useSelector((state) => state.auth)
+  const { isAuthenticated, user } = useSelector((state) => state.auth)
+  const { data } = useSelector((state) => state.wishlist)
   const dispatch = useDispatch()
   const navigate = useNavigate();
   const handleAddToCart = (item, isCardItem) => {
@@ -19,10 +22,27 @@ const ProductList = ({ productList }) => {
       }
     }
     else {
-      navigate('/register')
+      navigate('/login')
+    }
+  }
+  const handleWishlist = (id) => {
+    if (isAuthenticated) {
+      const isExistingProduct = data.find((item) => item.product_id == id)
+      if (isExistingProduct) {
+        dispatch(deleteWishlistItem(isExistingProduct.id))
+      } else {
+        dispatch(addWishListItem({ userId: user.id, productId: id }))
+      }
+    } else {
+      navigate('/login')
     }
   }
 
+  useEffect(() => {
+    if (user) {
+      dispatch(getWishlistData(user.id))
+    }
+  }, [user, dispatch])
 
   if (productList?.length == 0) return
   return (
@@ -32,11 +52,13 @@ const ProductList = ({ productList }) => {
         {productList.map((item) => {
           const { id, title, price, category, image, rating_count, rating_rate } = item
           const isCardItem = cart.cartData.some((el) => el.id == id)
+          const isWishListItem = data.some((el) => el.product_id == id)
+
           return (
             <div className='product_card' key={id}>
               <div className='product_card_image_wrapper'>
                 <img src={image} alt={title} />
-                <button className='wishList_button'> <HearSvgIcon /></button>
+                <button className={cx('wishList_button', isWishListItem && 'fill_wishlist')} onClick={() => handleWishlist(id)}><HearSvgIcon /></button>
               </div>
               <div className='product_category'>{category}</div>
               <div className='product_title' title={title}>{title}</div>

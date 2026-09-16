@@ -8,6 +8,9 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { supabase } from "./lib/supabaseClient";
 import { logout, setAuth } from "./slice/authSlice";
+import ProtectedRoute from "./components/UI/ProtectedRoute";
+import WishListWrapper from "./pages/wishlistPage/WishListWrapper";
+
 
 function App() {
   const dispatch = useDispatch()
@@ -32,7 +35,12 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/product/:id" element={<Preview />} />
-          <Route path="/cart" element={<CartContainer />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/cart" element={<CartContainer />} />
+          </Route>
+          <Route element={<ProtectedRoute/>}>
+            <Route path="/wishlist" element={<WishListWrapper/>}/>
+          </Route>
         </Routes>
       </BrowserRouter>
     </div>

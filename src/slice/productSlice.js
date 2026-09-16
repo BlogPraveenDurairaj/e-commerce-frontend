@@ -14,7 +14,6 @@ export const getProductsData = createAsyncThunk('products/getProducts', async ({
 export const getProductByIdData = createAsyncThunk('product/getProductById', async (id, { rejectWithValue }) => {
     try {
         const res = await getProductById(id);
-        console.log(res.data[0],'  params.append("select", "*");')
         return res.data[0]
     } catch (err) {
         return rejectWithValue(err.message || "Data not fetched")
@@ -29,6 +28,8 @@ const getLocalCart = () => {
         return []
     }
 }
+
+
 
 const productSlice = createSlice({
     name: "products",

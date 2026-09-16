@@ -9,7 +9,7 @@ import MiniHeaderSearch from './MiniHeaderSearch';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { supabase } from '../../lib/supabaseClient';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../slice/authSlice';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
@@ -24,6 +24,7 @@ const SearchHeader = ({
   const { cart, filter } = useSelector((state) => state.products)
   const { user, isAuthenticated } = useSelector((state) => state.auth)
   const [menuShow,setMenuShow] = useState(false)
+  const navigate = useNavigate()
 
   const handleMenuShow = () =>{
     setMenuShow((pre)=>!pre)
@@ -39,6 +40,7 @@ const SearchHeader = ({
       return
     }
     dispatch(logout())
+    window.location.href = '/'
     toast.success("Account successfully logout")
   }
 
@@ -72,7 +74,7 @@ const SearchHeader = ({
         <Link to={'/cart'} className="header_cart_icon_wrapper">
           <ProductCartSvgIcon />
           Card
-          {cart.cartData.length > 0 && (
+          {cart.cartData.length  > 0 && isAuthenticated &&  (
             <span className="cart_count">
               {cart.cartData.length}
             </span>
@@ -86,7 +88,7 @@ const SearchHeader = ({
               <Link to={'/login'}>Login</Link>
               <Link to={'/register'}>Signup</Link>
             </>}
-            <Link>WishList</Link>
+            <Link to={'/wishlist'}>WishList</Link>
           </div>}
         </div>
 
