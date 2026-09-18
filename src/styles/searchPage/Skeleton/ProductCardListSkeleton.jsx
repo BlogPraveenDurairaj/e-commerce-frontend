@@ -1,10 +1,9 @@
 import React from 'react'
 import ProductCardSkeleton from './ProductCardSkeleton';
-import './skeleton.css';
 
 const ProductCardListSkeleton = () => {
     return (
-        <div className="product_list_grid container">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 container-custom px-5">
             {Array.from({ length: 5 }).map((_, index) => (
                 <ProductCardSkeleton key={index} />
             ))}

@@ -1,12 +1,116 @@
-@import url('./styles/global.css');
+@import "tailwindcss";
 
-body {
-  margin: 0;
-  font-family: "Manrope", sans-serif;
+@layer base {
+  body {
+    margin: 0;
+    font-family: "Manrope", sans-serif;
+  }
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+:root {
+  --theme-primary: linear-gradient(to right, #259417 0%, #15bb4d 50%, #007d16 100%);
+}
+
+/* Custom Brand Utilities */
+.bg-theme-primary {
+  background: linear-gradient(to right, #259417 0%, #15bb4d 50%, #007d16 100%);
+}
+
+.bg-theme-primary-subtle {
+  background: linear-gradient(to right, #25941714 0%, #0bb043 50%, #25941714 100%);
+}
+
+.text-theme-primary {
+  color: #15bb4d;
+}
+
+.border-theme-primary {
+  border-color: #0bb043;
+}
+
+.container-custom {
+  max-width: 1320px;
+  margin-inline: auto;
+  padding: 30px 20px;
+}
+
+.common-input {
+  padding: 10px 12px;
+  border: 1px solid #bbb2b2;
+  border-radius: 10px;
+  outline-color: #0bb043;
+}
+
+/* Custom Select Dropdown Arrow */
+.select-custom-arrow {
+  appearance: none !important;
+  background-image: url('./assets/selectArrow.svg');
+  background-repeat: no-repeat;
+  background-position: calc(100% - 10px);
+  background-size: 12px;
+}
+
+/* Custom Animations */
+@keyframes expandSearch {
+  from {
+    width: 600px;
+  }
+
+  to {
+    width: 500px;
+  }
+}
+
+@keyframes expandPrimarySearch {
+  0% {
+    width: 500px;
+  }
+
+  100% {
+    width: 800px;
+  }
+}
+
+@keyframes expandPrimarySearchShrink {
+  0% {
+    width: 800px;
+  }
+
+  100% {
+    width: 0;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-expand-search {
+  animation: expandSearch 0.3s ease forwards;
+}
+
+.animate-expand-primary {
+  animation: expandPrimarySearch 0.5s ease forwards;
+}
+
+.animate-shrink-primary {
+  animation: expandPrimarySearchShrink 0.5s ease;
+}
+
+@media screen and (max-width:992px) {
+  .animate-expand-primary {
+    width: 100% !important;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
 }

@@ -38,7 +38,7 @@ const SearchHeaderAndFilterWrapper = ({isNotSearchPage}) => {
   };
 
   return (
-    <div className="product_header">
+    <div className="sticky top-0 bg-[#f5f5f5] z-10 w-full shadow-sm">
       <SearchHeader
         isPrimaryOpen={isPrimaryOpen}
         handleMiniFilterClick={handleMiniFilterClick}

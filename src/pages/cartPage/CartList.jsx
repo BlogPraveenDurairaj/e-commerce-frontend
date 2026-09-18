@@ -12,37 +12,37 @@ const CartList = ({ cartData }) => {
 
   return (
     <div>
-      <div className='cart_header_wrapper'>
-        <h1>Your Cart <span>({cartData?.length} Items)</span></h1>
-        <button className='cart_clear_button' onClick={()=>dispatch(handleRemoveAllCart())}>Clear All</button>
+      <div className='flex justify-between items-center gap-3 flex-wrap mb-6'>
+        <h1 className='text-2xl sm:text-3xl font-semibold leading-tight text-gray-800'>Your Cart <span className='text-base text-gray-500 font-normal ml-1'>({cartData?.length} Items)</span></h1>
+        <button className='bg-black border-0 flex px-4 py-2.5 rounded-lg gap-1.5 items-center text-sm cursor-pointer text-white hover:bg-gray-800 transition-colors' onClick={()=>dispatch(handleRemoveAllCart())}>Clear All</button>
       </div>
-      <div className='cart_Items_grid'>
+      <div className='grid gap-3'>
         {
           cartData.map((item) => {
             const { id, title, price, image, quantity, category } = item
             return (
-              <div className='cart_Item_wrapper' key={id}>
-                <div className='cart_image_Wrapper'>
-                  <img src={image} />
+              <div className='flex flex-col min-[400px]:flex-row gap-4 items-start p-3 bg-[#f5f5f5] rounded-xl' key={id}>
+                <div className='w-20 h-20 min-[400px]:w-[100px] min-[400px]:h-[100px] rounded-xl shrink-0'>
+                  <img src={image} alt={title} className='w-full h-full rounded-xl object-contain bg-white p-1' />
                 </div>
-                <div className='cart_content'>
-                  <div className='cart_item_top_info_Wrapper'>
+                <div className='w-full'>
+                  <div className='flex flex-col sm:flex-row justify-between w-full items-start gap-2 sm:gap-3 mb-4'>
                     <div>
-                      <p className='cart_category'>{category}</p>
-                      <p className='cart_title'>{title}</p>
+                      <p className='px-4 py-1 bg-emerald-100 inline-block rounded-md text-emerald-700 text-xs font-medium mb-1.5'>{category}</p>
+                      <p className='text-base sm:text-lg font-semibold text-gray-800'>{title}</p>
                     </div>
-                    <div className='cart_price_Wrapper'>
-                      <p className='cart_price'>${quantity * price}</p>
-                      <p className='cart_each_price'>(${price} each)</p>
+                    <div className='text-left sm:text-right'>
+                      <p className='text-base font-semibold mb-1 sm:mb-0 text-gray-900'>${quantity * price}</p>
+                      <p className='text-xs font-medium text-gray-500'>(${price} each)</p>
                     </div>
                   </div>
-                  <div className='cart_bottom_button_wrapper'>
-                    <div className='cart_increment_decrement_btn'>
-                      <button disabled={quantity == 1} onClick={() => dispatch(handleCartMinus(item))}><MinusIconSvg /></button>
-                      {quantity}
-                      <button onClick={() => dispatch(handleCartAdd({ id }))}><PlusIconSvg /></button>
+                  <div className='flex justify-between gap-3 items-end'>
+                    <div className='bg-white p-0.5 rounded-lg flex items-center gap-1.5 text-xs font-semibold text-gray-700 border border-gray-200'>
+                      <button className='border-0 bg-transparent flex items-center justify-center rounded-md p-1 cursor-pointer hover:bg-gray-100 disabled:opacity-40' disabled={quantity == 1} onClick={() => dispatch(handleCartMinus(item))}><MinusIconSvg /></button>
+                      <span>{quantity}</span>
+                      <button className='border-0 bg-transparent flex items-center justify-center rounded-md p-1 cursor-pointer hover:bg-gray-100' onClick={() => dispatch(handleCartAdd({ id }))}><PlusIconSvg /></button>
                     </div>
-                    <button className='cart_delete_btn' onClick={() => dispatch(handleCartDelete(id))}><DeleteIconSvg /><span>Remove</span></button>
+                    <button className='bg-white border-0 flex px-3 py-2 rounded-lg gap-1.5 items-center text-xs cursor-pointer text-gray-600 hover:text-red-600 transition-colors' onClick={() => dispatch(handleCartDelete(id))}><DeleteIconSvg /><span>Remove</span></button>
                   </div>
                 </div>
               </div>

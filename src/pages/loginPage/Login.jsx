@@ -37,14 +37,14 @@ const Login = () => {
 
     return (
         <LoginSignupWrapper>
-            <div className='login_signUp_form_wrapper'>
-                <h1>Welcome Back !</h1>
-                <form onSubmit={handleForm} className='login_signUp_form'>
-                    <input className='common_Input' name='email' placeholder='Enter email' value={user.email} required onChange={handleInput} />
-                    <input className='common_Input' name='password' type='password' placeholder='Enter password' value={user.password} required onChange={handleInput} />
+            <div className='max-w-[380px] mx-auto w-full text-center p-5 bg-white rounded-xl md:bg-transparent md:p-0'>
+                <h1 className='text-2xl font-bold text-gray-800'>Welcome Back !</h1>
+                <form onSubmit={handleForm} className='flex flex-col gap-3 mt-6'>
+                    <input className='w-full px-3 py-2.5 border border-gray-300 rounded-lg outline-emerald-600 focus:ring-2 focus:ring-emerald-500/20 text-sm' name='email' placeholder='Enter email' value={user.email} required onChange={handleInput} />
+                    <input className='w-full px-3 py-2.5 border border-gray-300 rounded-lg outline-emerald-600 focus:ring-2 focus:ring-emerald-500/20 text-sm' name='password' type='password' placeholder='Enter password' value={user.password} required onChange={handleInput} />
                     <Button label={"Login"} actionType={'submit'} />
                 </form>
-                <div className='login_signUp_link'>Don't have account <Link to={'/register'}>Register</Link></div>
+                <div className='text-gray-500 text-sm mt-5'>Don't have account <Link to={'/register'} className='text-emerald-600 underline font-medium hover:text-emerald-700'>Register</Link></div>
             </div>
         </LoginSignupWrapper>
 

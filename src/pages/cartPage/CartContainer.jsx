@@ -10,8 +10,8 @@ const CartContainer = () => {
     const { cart } = useSelector((state) => state.products);
     return (
         <UserLayout>
-            <div className='container'>
-                {cart?.cartData?.length > 0 ? <div className='cart_grid_wrapper'>
+            <div className='container-custom'>
+                {cart?.cartData?.length > 0 ? <div className='grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 items-start'>
                     <CartList cartData={cart?.cartData} />
                     <CartBill cartData={cart?.cartData} />
                 </div> : <NoCard />

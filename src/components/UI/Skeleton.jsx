@@ -7,9 +7,9 @@ const Skeleton = ({
 }) => {
   return (
     <div
-      className={`skeleton ${className}`}
+      className={`animate-pulse ${className}`}
       style={{
-        maxWidth:width,
+        maxWidth: width,
         height,
         backgroundColor: bgColor,
         borderRadius,

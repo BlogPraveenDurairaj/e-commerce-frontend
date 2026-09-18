@@ -22,21 +22,25 @@ const SearchContainer = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
+        console.log(entries,'entries')
+        console.log(entries[0].isIntersecting , !loading.dataLoading , hasMore)
         if (entries[0].isIntersecting && !loading.dataLoading && hasMore) {
           setPage((pre) => pre + 1)
+          console.log('isRuning')
         }
       }, {
       threshold: 0
     }
     )
     if (loaderRef.current) {
+      console.log(loaderRef.current,'loaderRef.current')
       observer.observe(loaderRef.current)
     }
     return () => observer.disconnect()
   }, [loading.dataLoading, hasMore])
 
   if (error) {
-    return <div>{error}</div>
+    return <div className='p-5 text-red-600 font-semibold'>{error}</div>
   }
 
   useEffect(() => {
@@ -52,14 +56,14 @@ const SearchContainer = () => {
 
   return (
     <UserLayout isNotSearchPage={false}>
-      <div className='mobile_search'>
+      <div className='block lg:hidden px-5 my-4'>
         <SearchFilter
           isPrimaryOpen={true}
           filter={filter}
         />
       </div>
       {isInitialLoading ? <ProductCardListSkeleton /> : <ProductList productList={data} />}
-      <div className='loading' ref={loaderRef}>
+      <div className='h-[5px]' ref={loaderRef} >
         {isLoadingMore && <ProductCardListSkeleton />}
         { !loading.dataLoading && data?.length == 0 && <NoProduct />}
       </div>

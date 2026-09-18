@@ -38,7 +38,8 @@ const WishListWrapper = () => {
 
     return (
         <UserLayout>
-            <div className='container'>
+            <div className='container-custom'>
+                <h1 className='text-2xl font-bold mb-4 text-gray-800'>My Wishlist</h1>
                 <Wishlist wishListData={wishlistProductData} handleDeleteItem={handleDeleteItem} />
             </div>
         </UserLayout>
