@@ -10,6 +10,8 @@ import { supabase } from "./lib/supabaseClient";
 import { logout, setAuth } from "./slice/authSlice";
 import ProtectedRoute from "./components/UI/ProtectedRoute";
 import WishListWrapper from "./pages/wishlistPage/WishListWrapper";
+import CheckoutContainer from "./pages/checkout/CheckoutContainer";
+import OrdersContainer from "./pages/orders/OrdersContainer";
 
 
 function App() {
@@ -38,8 +40,14 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/cart" element={<CartContainer />} />
           </Route>
-          <Route element={<ProtectedRoute/>}>
-            <Route path="/wishlist" element={<WishListWrapper/>}/>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/wishlist" element={<WishListWrapper />} />
+          </Route>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/checkout" element={<CheckoutContainer />} />
+          </Route>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/orders" element={<OrdersContainer/>} />
           </Route>
         </Routes>
       </BrowserRouter>

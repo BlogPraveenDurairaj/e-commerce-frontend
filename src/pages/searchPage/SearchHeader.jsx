@@ -23,11 +23,11 @@ const SearchHeader = ({
   const dispatch = useDispatch()
   const { cart, filter } = useSelector((state) => state.products)
   const { user, isAuthenticated } = useSelector((state) => state.auth)
-  const [menuShow,setMenuShow] = useState(false)
+  const [menuShow, setMenuShow] = useState(false)
   const navigate = useNavigate()
 
-  const handleMenuShow = () =>{
-    setMenuShow((pre)=>!pre)
+  const handleMenuShow = () => {
+    setMenuShow((pre) => !pre)
   }
 
   const name = user?.user_metadata?.full_name || "guest"
@@ -73,21 +73,28 @@ const SearchHeader = ({
         <Link to={'/cart'} className="relative bg-white px-3 py-2 rounded-l-2xl rounded-r-md flex items-center gap-1.5 text-black no-underline text-sm font-medium hover:bg-gray-50 transition-colors shadow-sm">
           <ProductCartSvgIcon />
           <span>Card</span>
-          {cart.cartData.length  > 0 && isAuthenticated &&  (
+          {cart.cartData.length > 0 && isAuthenticated && (
             <span className="bg-theme-primary w-4 h-4 flex items-center justify-center rounded-full text-white text-[10px] font-bold">
               {cart.cartData.length}
             </span>
           )}
         </Link>
-        <div className='flex items-center gap-1.5 bg-white rounded-l-md rounded-r-2xl p-1 pl-2 relative cursor-pointer hover:bg-gray-50 transition-colors shadow-sm' onClick={()=>handleMenuShow()}>
+        <div className='flex items-center gap-1.5 bg-white rounded-l-md rounded-r-2xl p-1 pl-2 relative cursor-pointer hover:bg-gray-50 transition-colors shadow-sm' onClick={() => handleMenuShow()}>
           <MenuSvgIcon />
           <div className='h-8 w-8 bg-[#f5f5f5] flex items-center justify-center rounded-full font-semibold text-gray-700 text-xs'>{name.slice(0, 1).toUpperCase()}</div>
-         {menuShow &&  <div className='absolute top-[calc(100%+10px)] p-1 bg-white flex flex-col rounded-xl right-0 w-36 gap-1 shadow-lg z-20 border border-gray-100'>
-            {isAuthenticated ? <button className='text-gray-800 px-3 py-1.5 bg-white text-left hover:bg-gray-100 font-medium rounded-lg text-sm border-0 cursor-pointer' onClick={() => handleLogout()}>Logout</button> : <>
-              <Link to={'/login'} className='text-gray-800 px-3 py-1.5 bg-white text-left hover:bg-gray-100 font-medium rounded-lg text-sm no-underline block'>Login</Link>
-              <Link to={'/register'} className='text-gray-800 px-3 py-1.5 bg-white text-left hover:bg-gray-100 font-medium rounded-lg text-sm no-underline block'>Signup</Link>
-            </>}
-            <Link to={'/wishlist'} className='text-gray-800 px-3 py-1.5 bg-white text-left hover:bg-gray-100 font-medium rounded-lg text-sm no-underline block'>WishList</Link>
+          {menuShow && <div className='absolute top-[calc(100%+10px)] p-1 bg-white flex flex-col rounded-xl right-0 w-36 gap-1 shadow-lg z-20 border border-gray-100'>
+            {isAuthenticated ?
+              <>
+                <Link to={'/orders'} className='text-gray-800 px-3 py-1.5 bg-white text-left hover:bg-gray-100 font-medium rounded-lg text-sm no-underline block'>My orders</Link>
+                <Link to={'/wishlist'} className='text-gray-800 px-3 py-1.5 bg-white text-left hover:bg-gray-100 font-medium rounded-lg text-sm no-underline block'>WishList</Link>
+                <button className='text-gray-800 px-3 py-1.5 bg-white text-left hover:bg-gray-100 font-medium rounded-lg text-sm border-0 cursor-pointer' onClick={() => handleLogout()}>Logout</button>
+              </>
+
+              : <>
+                <Link to={'/login'} className='text-gray-800 px-3 py-1.5 bg-white text-left hover:bg-gray-100 font-medium rounded-lg text-sm no-underline block'>Login</Link>
+                <Link to={'/register'} className='text-gray-800 px-3 py-1.5 bg-white text-left hover:bg-gray-100 font-medium rounded-lg text-sm no-underline block'>Signup</Link>
+              </>}
+
           </div>}
         </div>
 

@@ -3,17 +3,16 @@ import Button from '../../components/UI/Button'
 
 const CartBill = ({ cartData }) => {
   const subTotalPrice = cartData.reduce((acc, item) => acc + (item.price * item.quantity), 0)
-  const [paymentStatus, setPaymentStatus] = useState(false)
   const getAmountByTotal = (total) => {
     return (percentage) => {
       return Math.floor(total * percentage / 100)
     }
   }
   const getOtherFee = getAmountByTotal(subTotalPrice)
-  const total = subTotalPrice - (getOtherFee(10) - getOtherFee(20))
+  const total = subTotalPrice + (getOtherFee(10) + getOtherFee(20))
   const bill = [
     {
-      label: `Items subtotal ${cartData?.length} items`,
+      label: `Subtotal ${cartData?.length} items`,
       amount: subTotalPrice
     },
     {
@@ -35,10 +34,10 @@ const CartBill = ({ cartData }) => {
         </div>
       ))}
       <div className='p-3 px-5 bg-white rounded-lg grid grid-cols-2 items-center mb-3'>
-        <div className='font-medium text-gray-800'>Total</div> 
+        <div className='font-medium text-gray-800'>Total</div>
         <div className='text-2xl font-semibold text-right text-gray-900'>${total}</div>
       </div>
-      <Button label={`Proceed to checkout - $${total} `} buttonAction={() => setPaymentStatus(!paymentStatus)} containerClass={'w-full'} />
+      <Button label={`Proceed to checkout - $${total} `} type='link' to={'/checkout'} containerClass={'w-full'} />
     </div>
 
   )

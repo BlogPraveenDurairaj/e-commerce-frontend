@@ -13,7 +13,7 @@ const CartList = ({ cartData }) => {
   return (
     <div>
       <div className='flex justify-between items-center gap-3 flex-wrap mb-6'>
-        <h1 className='text-2xl sm:text-3xl font-semibold leading-tight text-gray-800'>Your Cart <span className='text-base text-gray-500 font-normal ml-1'>({cartData?.length} Items)</span></h1>
+        <h1 className='text-2xl font-bold text-gray-800'>Your Cart <span className='text-base text-gray-500 font-normal ml-1'>({cartData?.length} Items)</span></h1>
         <button className='bg-black border-0 flex px-4 py-2.5 rounded-lg gap-1.5 items-center text-sm cursor-pointer text-white hover:bg-gray-800 transition-colors' onClick={()=>dispatch(handleRemoveAllCart())}>Clear All</button>
       </div>
       <div className='grid gap-3'>
