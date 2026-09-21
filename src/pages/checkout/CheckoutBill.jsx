@@ -1,16 +1,20 @@
 import React, { useState } from 'react'
 import Button from '../../components/UI/Button'
 import { useDispatch, useSelector } from 'react-redux'
-import { addOrderDetails, createOrderData } from '../../slice/orderSlice'
+import { addOrderDetails, createOrderData, removeOrderDetails } from '../../slice/orderSlice'
 
 import toast from 'react-hot-toast'
 import { supabase } from '../../lib/supabaseClient'
+import { handleRemoveAllCart } from '../../slice/productSlice'
+import { useNavigate } from 'react-router-dom'
 
 const CheckoutBill = ({ cartData }) => {
     const subTotalPrice = cartData.reduce((acc, item) => acc + (item.price * item.quantity), 0)
     const { user, session } = useSelector((state) => state.auth)
     const { orderDetails, checkoutFormValid } = useSelector((state) => state.orders)
+    const navigate = useNavigate()
     const dispatch = useDispatch()
+
 
 
     const getAmountByTotal = (total) => {
@@ -43,6 +47,7 @@ const CheckoutBill = ({ cartData }) => {
     const handlePlaceOrder = async () => {
         if (!checkoutFormValid) {
             toast.error("Fill the shipping information")
+            return
         };
         const { data: { user: supabaseUser } } =
             await supabase.auth.getUser(session.access_token);
@@ -56,9 +61,12 @@ const CheckoutBill = ({ cartData }) => {
             user_id: supabaseUser.id
         };
 
-      
+
         dispatch(addOrderDetails(data))
         dispatch(createOrderData({ data, accessToken: session.access_token }))
+        dispatch(handleRemoveAllCart())
+        dispatch(removeOrderDetails())
+        navigate('/orders', { replace: true })
         toast.success("order placed")
     }
 

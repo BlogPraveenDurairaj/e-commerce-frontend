@@ -64,7 +64,7 @@ const SearchContainer = () => {
       </div>
       {isInitialLoading ? <ProductCardListSkeleton /> : <ProductList productList={data} />}
       <div className='h-[5px]' ref={loaderRef} >
-        {isLoadingMore && <ProductCardListSkeleton />}
+        {isLoadingMore && <ProductCardListSkeleton length={10} />}
         { !loading.dataLoading && data?.length == 0 && <NoProduct />}
       </div>
     </UserLayout>

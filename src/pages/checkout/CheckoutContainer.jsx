@@ -9,6 +9,7 @@ import CheckoutBill from './CheckoutBill'
 
 const CheckoutContainer = () => {
  const { cart } = useSelector((state) => state.products);
+
     return (
         <UserLayout>
             <div className='container-custom'>
