@@ -13,6 +13,7 @@ const Skeleton = ({
         height,
         backgroundColor: bgColor,
         borderRadius,
+        width:"100%"
       }}
     />
   );

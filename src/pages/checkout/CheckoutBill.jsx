@@ -7,6 +7,7 @@ import toast from 'react-hot-toast'
 import { supabase } from '../../lib/supabaseClient'
 import { handleRemoveAllCart } from '../../slice/productSlice'
 import { useNavigate } from 'react-router-dom'
+import { createOrderItem } from '../../api/ordersApi'
 
 const CheckoutBill = ({ cartData }) => {
     const subTotalPrice = cartData.reduce((acc, item) => acc + (item.price * item.quantity), 0)
@@ -63,11 +64,25 @@ const CheckoutBill = ({ cartData }) => {
 
 
         dispatch(addOrderDetails(data))
-        dispatch(createOrderData({ data, accessToken: session.access_token }))
-        dispatch(handleRemoveAllCart())
-        dispatch(removeOrderDetails())
-        navigate('/orders', { replace: true })
-        toast.success("order placed")
+        const orderData = await dispatch(createOrderData({ data, accessToken: session.access_token })).unwrap()
+        if (orderData) {
+            const orderItems = cartData?.map((item) => ({
+                order_id: orderData.id,
+                product_id: item.id,
+                product_name: item.title,
+                product_image: item.image,
+                price: item.price,
+                quantity: item.quantity,
+            }))
+            const res = await createOrderItem(orderItems)
+            if (res) {
+                dispatch(handleRemoveAllCart())
+                dispatch(removeOrderDetails())
+                navigate('/orders', { replace: true })
+                toast.success("order placed")
+            }
+        }
+
     }
 
     return (

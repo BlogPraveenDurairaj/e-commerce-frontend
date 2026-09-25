@@ -62,10 +62,15 @@ const wishlistSlice = createSlice({
                 state.error = action.payload
             })
             .addCase(getWishlistData.fulfilled, (state, action) => {
+                state.loading = false
                 state.data = action.payload
             })
             .addCase(getWishlistData.rejected, (state, action) => {
+                state.loading = false
                 state.error = action.payload
+            })
+            .addCase(getWishlistData.pending,(state)=>{
+                state.loading = true
             })
             .addCase(deleteWishlistItem.fulfilled, (state, action) => {
                 state.data = state.data.filter((item) => item.id != action.payload)
@@ -74,10 +79,15 @@ const wishlistSlice = createSlice({
                 state.error = action.payload
             })
             .addCase(fetchAllWishListData.fulfilled, (state, action) => {
+                 state.loading = false
                 state.wishlistProductData = action.payload
             })
             .addCase(fetchAllWishListData.rejected, (state, action) => {
+                 state.loading = false
                 state.error = action.payload
+            })
+             .addCase(fetchAllWishListData.pending, (state, action) => {
+                  state.loading = true
             })
     }
 })

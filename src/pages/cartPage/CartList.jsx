@@ -1,20 +1,44 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { handleCartAdd, handleCartDelete, handleCartMinus, handleRemoveAllCart } from '../../slice/productSlice'
 import { DeleteIconSvg, MinusIconSvg, PlusIconSvg } from '../../assets/svgComponent/SvgIcon1';
+import Modal from '../../components/UI/Modal';
+import Button from '../../components/UI/Button';
+
+const ClearModalBody = ({ handleConfirm }) => {
+  return (
+    <div>
+      <p>Are you sure want to clear all items</p>
+      <div className='flex justify-end gap-3 mt-2'>
+        <Button buttonAction={handleConfirm} label={"Confirm"} style={'black'} />
+      </div>
+    </div>
+  )
+}
 
 const CartList = ({ cartData }) => {
   const dispatch = useDispatch()
+  const [clearModal, setClearModal] = useState(false)
 
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cartData))
   }, [cartData])
 
+  const handleClearModal = () => {
+    dispatch(handleRemoveAllCart())
+    setClearModal(false)
+  }
+
+
+
   return (
     <div>
+      <Modal isShow={clearModal} handleClose={() => setClearModal(false)} title={"Clear all cart items"}>
+        <ClearModalBody handleConfirm={handleClearModal}/>
+      </Modal>
       <div className='flex justify-between items-center gap-3 flex-wrap mb-6'>
         <h1 className='text-2xl font-bold text-gray-800'>Your Cart <span className='text-base text-gray-500 font-normal ml-1'>({cartData?.length} Items)</span></h1>
-        <button className='bg-black border-0 flex px-4 py-2.5 rounded-lg gap-1.5 items-center text-sm cursor-pointer text-white hover:bg-gray-800 transition-colors' onClick={()=>dispatch(handleRemoveAllCart())}>Clear All</button>
+    <Button label={'Clear All'} style='black' buttonAction={()=>setClearModal(true)}/>
       </div>
       <div className='grid gap-3'>
         {

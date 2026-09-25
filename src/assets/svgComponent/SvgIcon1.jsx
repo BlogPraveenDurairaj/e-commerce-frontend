@@ -157,3 +157,24 @@ export const ThreeDotSvgIcon = ({ className }) => {
         </svg>
     )
 }
+
+export const CloseIconSvg = ({ className }) => {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            width={18}
+            height={18}
+            className={className}
+        >
+            <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 6l12 12M18 6L6 18"
+            />
+        </svg>
+    )
+}

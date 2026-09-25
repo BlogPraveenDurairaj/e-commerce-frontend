@@ -7,6 +7,7 @@ import NoProduct from './NoProduct';
 import UserLayout from '../../components/layout/UserLayout';
 import SearchFilter from './SearchFilter';
 import { useLocation } from 'react-router-dom';
+import Skeleton from '../../components/UI/Skeleton';
 
 const SearchContainer = () => {
   const { data, error, loading, hasMore, filter, cart } = useSelector((state) => state.products)
@@ -22,8 +23,8 @@ const SearchContainer = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        console.log(entries,'entries')
-        console.log(entries[0].isIntersecting , !loading.dataLoading , hasMore)
+        console.log(entries, 'entries')
+        console.log(entries[0].isIntersecting, !loading.dataLoading, hasMore)
         if (entries[0].isIntersecting && !loading.dataLoading && hasMore) {
           setPage((pre) => pre + 1)
           console.log('isRuning')
@@ -33,7 +34,7 @@ const SearchContainer = () => {
     }
     )
     if (loaderRef.current) {
-      console.log(loaderRef.current,'loaderRef.current')
+      console.log(loaderRef.current, 'loaderRef.current')
       observer.observe(loaderRef.current)
     }
     return () => observer.disconnect()
@@ -56,16 +57,23 @@ const SearchContainer = () => {
 
   return (
     <UserLayout isNotSearchPage={false}>
-      <div className='block lg:hidden px-5 my-4'>
+      <div className='block xl:hidden px-5 my-4'>
         <SearchFilter
           isPrimaryOpen={true}
           filter={filter}
         />
       </div>
-      {isInitialLoading ? <ProductCardListSkeleton /> : <ProductList productList={data} />}
-      <div className='h-[5px]' ref={loaderRef} >
-        {isLoadingMore && <ProductCardListSkeleton length={10} />}
-        { !loading.dataLoading && data?.length == 0 && <NoProduct />}
+      <div className='container-custom my-5'>
+        {isInitialLoading ? <> <Skeleton
+          width="200px"
+          height="32px"
+          borderRadius="8px"
+          className={'mb-4'}
+        /><ProductCardListSkeleton length={10} /></> : <ProductList productList={data} />}
+        <div className='h-[5px]' ref={loaderRef} >
+          {isLoadingMore && <ProductCardListSkeleton />}
+          {!loading.dataLoading && data?.length == 0 && <NoProduct />}
+        </div>
       </div>
     </UserLayout>
   )

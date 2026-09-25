@@ -12,6 +12,7 @@ import ProtectedRoute from "./components/UI/ProtectedRoute";
 import WishListWrapper from "./pages/wishlistPage/WishListWrapper";
 import CheckoutContainer from "./pages/checkout/CheckoutContainer";
 import OrdersContainer from "./pages/orders/OrdersContainer";
+import ViewOrderContainer from "./pages/viewOrderPage/ViewOrderContainer";
 
 
 function App() {
@@ -48,6 +49,9 @@ function App() {
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route path="/orders" element={<OrdersContainer/>} />
+          </Route>
+          <Route element={<ProtectedRoute />}>
+            <Route path={`/orders/:id`} element={<ViewOrderContainer/>} />
           </Route>
         </Routes>
       </BrowserRouter>

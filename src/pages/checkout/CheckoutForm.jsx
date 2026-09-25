@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form'
 import Button from '../../components/UI/Button';
 import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useDispatch } from 'react-redux';
-import { addOrderDetails } from '../../slice/orderSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addOrderDetails, editOrderDetails } from '../../slice/orderSlice';
 import toast from 'react-hot-toast';
 const checkoutFormSchema = z.object({
     name: z.string().min(2, 'Name must be at least 2 characters').max(50, "Name to long"),
@@ -18,6 +18,7 @@ const checkoutFormSchema = z.object({
 const CheckoutForm = () => {
     const dispatch = useDispatch()
     const { register, handleSubmit, formState: { errors } } = useForm({ resolver: zodResolver(checkoutFormSchema), mode: 'onChange' });
+    const { checkoutFormValid } = useSelector((state) => state.orders)
 
     const shippingInputs = [
         {
@@ -49,17 +50,22 @@ const CheckoutForm = () => {
     ]
 
     const handleCheckoutForm = (data) => {
-        dispatch(addOrderDetails(
-            {
-                shipping_name:data?.name,
-                shipping_phone:data?.phone,
-                shipping_address:data?.address,
-                shipping_city:data?.city,
-                shipping_pincode:data?.PIN_Code,
-                payment_method:"COD"
-            }
-        ))
-        toast.success("Address added")
+        if (checkoutFormValid) {
+            dispatch(editOrderDetails())
+        } else {
+            dispatch(addOrderDetails(
+                {
+                    shipping_name: data?.name,
+                    shipping_phone: data?.phone,
+                    shipping_address: data?.address,
+                    shipping_city: data?.city,
+                    shipping_pincode: data?.PIN_Code,
+                    payment_method: "COD"
+                }
+            ))
+            toast.success("Address added")
+        }
+
     }
     return (
         <div className='bg-gray-50 p-5 rounded-2xl'>
@@ -68,12 +74,12 @@ const CheckoutForm = () => {
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                     {shippingInputs?.map((item) => {
                         return (
-                            <Input label={item.label} id={item.label} placeholder={item.placeholder} key={item.label} error={errors[item.name]?.message} {...register(item.name, { required: `${item.name} is required` })} />
+                            <Input disabled={checkoutFormValid} label={item.label} id={item.label} placeholder={item.placeholder} key={item.label} error={errors[item.name]?.message} {...register(item.name, { required: `${item.name} is required` })} />
                         )
                     })}
                 </div>
                 <div className='flex justify-end'>
-                    <Button label={'Add'} style={'black'} actionType={'submit'} />
+                    <Button label={checkoutFormValid ? 'Edit' : 'Add'} style={'black'} actionType={'submit'} />
                 </div>
             </form>
 

@@ -4,10 +4,11 @@ import Wishlist from './Wishlist';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteProductWishlistItem, deleteWishlistItem, fetchAllWishListData, getWishlistData, clearWishListProductData } from '../../slice/wishlistSlice';
 import toast from 'react-hot-toast';
+import ProductCardListSkeleton from '../../styles/searchPage/Skeleton/ProductCardListSkeleton';
 
 const WishListWrapper = () => {
     const dispatch = useDispatch()
-    const { data, wishlistProductData } = useSelector((state) => state.wishlist)
+    const { data, wishlistProductData, loading } = useSelector((state) => state.wishlist)
     const { user } = useSelector((state) => state.auth)
     const productIds = data?.map((item) => item.product_id)
 
@@ -40,7 +41,7 @@ const WishListWrapper = () => {
         <UserLayout>
             <div className='container-custom'>
                 <h1 className='text-2xl font-bold mb-4 text-gray-800'>My Wishlist</h1>
-                <Wishlist wishListData={wishlistProductData} handleDeleteItem={handleDeleteItem} />
+                {loading ? <ProductCardListSkeleton /> : <Wishlist wishListData={wishlistProductData} handleDeleteItem={handleDeleteItem} />}
             </div>
         </UserLayout>
     )

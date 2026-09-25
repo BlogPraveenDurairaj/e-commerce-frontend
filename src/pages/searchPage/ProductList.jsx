@@ -46,7 +46,7 @@ const ProductList = ({ productList }) => {
 
   if (productList?.length == 0) return null;
   return (
-    <section className='container-custom my-5'>
+    <section >
       <h2 className='text-2xl font-bold mb-4 text-gray-800'>Discover Products</h2>
       <div className='grid grid-cols-1 min-[450px]:grid-cols-2 min-[680px]:grid-cols-3 min-[992px]:grid-cols-4 xl:grid-cols-5 gap-4 my-5'>
         {productList.map((item) => {
@@ -59,7 +59,7 @@ const ProductList = ({ productList }) => {
               <div>
                 <div className='relative h-[150px] bg-[#f5f5f5] rounded-xl flex items-center justify-center p-5'>
                   <img src={image} alt={title} className='object-contain w-full h-full' />
-                  <button className={cx('absolute top-2.5 right-2.5 bg-white border-0 w-7 h-7 flex items-center justify-center rounded-full p-1.5 cursor-pointer shadow-sm hover:scale-105 transition-transform', isWishListItem && '[&_svg]:fill-red-500 [&_svg]:text-red-500')} onClick={() => handleWishlist(id)}><HearSvgIcon /></button>
+                  <button className={cx('absolute top-2.5 right-2.5 bg-white border-0 w-7 h-7 flex items-center justify-center rounded-full p-1.5 cursor-pointer shadow-sm hover:scale-105 transition-transform', isWishListItem && '[&_svg]:fill-red-500 [&_svg]:text-red-500')} onClick={() => handleWishlist(id)} title={isWishListItem ? "Saved":"Save"}><HearSvgIcon /></button>
                 </div>
                 <div className='bg-emerald-100 text-emerald-800 my-2 rounded-lg inline-block px-2 py-0.5 text-xs font-medium self-start'>{category}</div>
                 <div className='text-sm font-medium leading-snug mb-2 line-clamp-1 text-gray-800' title={title}>{title}</div>
