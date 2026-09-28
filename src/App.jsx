@@ -13,6 +13,10 @@ import WishListWrapper from "./pages/wishlistPage/WishListWrapper";
 import CheckoutContainer from "./pages/checkout/CheckoutContainer";
 import OrdersContainer from "./pages/orders/OrdersContainer";
 import ViewOrderContainer from "./pages/viewOrderPage/ViewOrderContainer";
+import AdminLogin from "./pages/admin/adminLogin/AdminLogin";
+import AdminProtectedRoute from "./components/UI/AdminProtected";
+import ManageProducts from "./pages/admin/manageProductsPage/ManageProducts";
+import { setAdminAuth } from "./slice/adminAuthSlice";
 
 
 function App() {
@@ -23,6 +27,7 @@ function App() {
 
       if (session) {
         dispatch(setAuth({ user: session.user, session: session }))
+        dispatch(setAdminAuth({ user: session.user, session: session }))
       } else {
         dispatch(logout())
       }
@@ -30,6 +35,7 @@ function App() {
     restoreSession()
   }, [dispatch])
 
+ 
   return (
     <div>
       <BrowserRouter>
@@ -48,10 +54,14 @@ function App() {
             <Route path="/checkout" element={<CheckoutContainer />} />
           </Route>
           <Route element={<ProtectedRoute />}>
-            <Route path="/orders" element={<OrdersContainer/>} />
+            <Route path="/orders" element={<OrdersContainer />} />
           </Route>
           <Route element={<ProtectedRoute />}>
-            <Route path={`/orders/:id`} element={<ViewOrderContainer/>} />
+            <Route path={`/orders/:id`} element={<ViewOrderContainer />} />
+          </Route>
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route element={<AdminProtectedRoute />}>
+            <Route path="/manage-products" element={<ManageProducts />} />
           </Route>
         </Routes>
       </BrowserRouter>

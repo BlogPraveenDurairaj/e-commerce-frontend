@@ -1,11 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getProducts, getProductById } from "../api/productApi";
 import toast from "react-hot-toast";
-export const getProductsData = createAsyncThunk('products/getProducts', async ({ page, category, sort, search }, { rejectWithValue }) => {
+export const getProductsData = createAsyncThunk('products/getProducts', async ({ page, category, sort, search,isPagination }, { rejectWithValue }) => {
 
     try {
-        const res = await getProducts(page, category, sort, search)
-        return { data: res.data, page: page }
+        const res = await getProducts(page, category, sort, search,isPagination)
+        let contentRange = res.headers["content-range"]
+        const total = Number(contentRange.split("/")[1]);
+        return { data: res.data, page: page, total: total,isPagination:isPagination }
+
     } catch (err) {
         return rejectWithValue(err.message || "something went wrong")
     }
@@ -60,9 +63,9 @@ const productSlice = createSlice({
                 isAlreadyIn.quantity = isAlreadyIn.quantity + 1
             } else {
                 state.cart.cartData.push(action.payload)
-                 toast.success("Product added to cart!")
+                toast.success("Product added to cart!")
             }
-           
+
         },
         handleCartMinus(state, action) {
             const isAlreadyIn = state.cart.cartData.find((item) => item.id === action.payload.id)
@@ -95,17 +98,22 @@ const productSlice = createSlice({
         builder.addCase(getProductsData.pending, (state) => {
             state.loading.dataLoading = true
         }).addCase(getProductsData.fulfilled, (state, action) => {
-            const { data, page } = action.payload
-            if (page == 1) {
+            const { data, page, total, isPagination } = action.payload
+            console.log(action.payload,'action.payload')
+            if (isPagination) {
                 state.data = data
             } else {
-                state.data.push(...data)
+                if (page == 1) {
+                    state.data = data
+                } else {
+                    state.data.push(...data)
+                }
             }
+
             state.page = page
             state.hasMore = data.length > 0
             state.loading.dataLoading = false
-
-
+            state.total = total
         }).addCase(getProductsData.rejected, (state, action) => {
             state.loading.dataLoading = false
             state.error = action.payload
@@ -124,6 +132,6 @@ const productSlice = createSlice({
     }
 })
 
-export const { handleCartAdd, handleCartDelete, handleCartMinus, handleFilter,handleRemoveAllCart } = productSlice.actions
+export const { handleCartAdd, handleCartDelete, handleCartMinus, handleFilter, handleRemoveAllCart } = productSlice.actions
 
 export default productSlice.reducer

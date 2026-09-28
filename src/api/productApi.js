@@ -1,12 +1,12 @@
 import { api } from "./api";
 export const getProducts = (page = 1, category, sort = "asc", search = '') => {
     let params = new URLSearchParams()
-      params.append("select", "*");
+    params.append("select", "*");
 
-      let limit = 10;
-      const offset = (page -1) * limit
-      params.append("limit",limit)
-      params.append("offset",offset)
+    let limit = 10;
+    const offset = (page - 1) * limit
+    params.append("limit", limit)
+    params.append("offset", offset)
     if (category) {
         params.append('category', `eq.${category}`)
     }
@@ -16,7 +16,11 @@ export const getProducts = (page = 1, category, sort = "asc", search = '') => {
     if (sort) {
         params.append("order", `price.${sort}`)
     }
-    return api.get(`/products?${params.toString()}`)
+    return api.get(`/products?${params.toString()}`,{
+    headers: {
+        Prefer: "count=exact",
+    }
+})
 }
 
 export const getProductById = (id) => api.get(`/products?id=eq.${id}&select='*`)
