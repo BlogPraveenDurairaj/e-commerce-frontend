@@ -1,19 +1,21 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getProducts, getProductById } from "../api/productApi";
+import { getProducts, getProductById, deleteProductByID, createProduct, updateProduct } from "../api/productApi";
 import toast from "react-hot-toast";
-export const getProductsData = createAsyncThunk('products/getProducts', async ({ page, category, sort, search,isPagination }, { rejectWithValue }) => {
+// get all product 
+export const getProductsData = createAsyncThunk('products/getProducts', async ({ page, category, sort, search, isPagination }, { rejectWithValue }) => {
 
     try {
-        const res = await getProducts(page, category, sort, search,isPagination)
+        const res = await getProducts(page, category, sort, search, isPagination)
         let contentRange = res.headers["content-range"]
         const total = Number(contentRange.split("/")[1]);
-        return { data: res.data, page: page, total: total,isPagination:isPagination }
+        return { data: res.data, page: page, total: total, isPagination: isPagination }
 
     } catch (err) {
         return rejectWithValue(err.message || "something went wrong")
     }
 })
 
+// get single product
 export const getProductByIdData = createAsyncThunk('product/getProductById', async (id, { rejectWithValue }) => {
     try {
         const res = await getProductById(id);
@@ -22,6 +24,37 @@ export const getProductByIdData = createAsyncThunk('product/getProductById', asy
         return rejectWithValue(err.message || "Data not fetched")
     }
 })
+
+// delete product
+export const deleteProductData = createAsyncThunk('product/deleteProductById', async (id, { rejectWithValue }) => {
+    try {
+        const res = await deleteProductByID(id)
+        return res
+    } catch (err) {
+        return rejectWithValue(err.message)
+    }
+})
+
+// add Product 
+
+export const createProductData = createAsyncThunk('product/createProduct', async (data, { rejectWithValue }) => {
+    try {
+        const res = await createProduct(data);
+        return res.data[0]
+    } catch (err) {
+        return rejectWithValue(err.message)
+    }
+})
+
+export const updateProductData = createAsyncThunk('product/updateProduct', async ({ id, data }, { rejectWithValue }) => {
+    try {
+        const res = await updateProduct(id, data)
+        return res.data[0]
+    } catch (err) {
+        return rejectWithValue(err.message)
+    }
+})
+
 
 const getLocalCart = () => {
     try {
@@ -42,7 +75,10 @@ const productSlice = createSlice({
         page: 1,
         loading: {
             dataLoading: false,
-            previewDataLoading: false
+            previewDataLoading: false,
+            deleteLoading: false,
+            addLoading: false,
+            updateLoading: false
         },
         filter: {
             productNameFilter: '',
@@ -99,7 +135,6 @@ const productSlice = createSlice({
             state.loading.dataLoading = true
         }).addCase(getProductsData.fulfilled, (state, action) => {
             const { data, page, total, isPagination } = action.payload
-            console.log(action.payload,'action.payload')
             if (isPagination) {
                 state.data = data
             } else {
@@ -109,7 +144,6 @@ const productSlice = createSlice({
                     state.data.push(...data)
                 }
             }
-
             state.page = page
             state.hasMore = data.length > 0
             state.loading.dataLoading = false
@@ -127,6 +161,28 @@ const productSlice = createSlice({
             })
             .addCase(getProductByIdData.rejected, (state, action) => {
                 state.loading.previewDataLoading = false
+                state.error = action.payload
+            })
+            .addCase(createProductData.pending, (state) => {
+                state.loading.addLoading = true
+            })
+            .addCase(createProductData.fulfilled, (state, action) => {
+                state.loading.addLoading = false
+                state.data.unshift(action.payload)
+            })
+            .addCase(createProductData.rejected, (state, action) => {
+                state.loading.addLoading = false
+                action.error = action.payload
+            })
+            .addCase(updateProductData.pending, (state) => {
+                state.loading.updateLoading = true
+            })
+            .addCase(updateProductData.fulfilled, (state,action) => {
+                state.loading.updateLoading = false
+                state.data = state.data.map((item)=> item.id === action.payload.id  ? action.payload : item)
+            })
+            .addCase(updateProductData.rejected, (state,action) => {
+                state.loading.updateLoading = false
                 state.error = action.payload
             })
     }

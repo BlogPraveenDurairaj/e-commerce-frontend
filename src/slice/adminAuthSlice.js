@@ -1,4 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { getRole } from "../api/adminAuthApi";
+
+export const getRoleData = createAsyncThunk('admin/getRole', async ({user_id,access_token}, { rejectWithValue }) => {
+    try {
+        const res = await getRole(user_id, access_token)
+        if(!res.data.length){
+            return rejectWithValue('No access for this user')
+        }
+        return res.data[0]
+    } catch (err) {
+        return rejectWithValue(err.message)
+    }
+})
+
 
 
 const adminAuthSlice = createSlice({
@@ -7,7 +21,8 @@ const adminAuthSlice = createSlice({
         admin: null,
         session: null,
         isAuthenticated: false,
-        loading:true
+        loading: true,
+        role:null,
     },
     reducers: {
         setAdminAuth(state, action) {
@@ -22,8 +37,22 @@ const adminAuthSlice = createSlice({
             state.isAuthenticated = false
             state.loading = false
         }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(getRoleData.pending, (state) => {
+            state.loading = true
+        })
+            .addCase(getRoleData.fulfilled, (state, action) => {
+                state.loading = false
+                state.loginError = null
+                state.role = action.payload.role
+            })
+            .addCase(getRoleData.rejected, (state) => {
+                state.loading = false
+            })
     }
 })
+
 export const { setAdminAuth, adminLogout } = adminAuthSlice.actions
 
 export default adminAuthSlice.reducer

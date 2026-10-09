@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import CustomTable from '../../../components/UI/CustomTable'
 import { useDispatch, useSelector } from 'react-redux'
-import { getProductsData } from '../../../slice/productSlice'
+import { deleteProductData, getProductsData } from '../../../slice/productSlice'
 import AdminLayout from '../../../components/layout/AdminLayout'
+import { DeleteIcon, EditIcon, Spinner } from '../../../assets/svgComponent/SvgIcon2'
+import Button from '../../../components/UI/Button'
+import Modal from '../../../components/UI/Modal'
 
 const ManageProducts = () => {
   const { data, error, loading, total } = useSelector((state) => state.products);
@@ -43,13 +46,37 @@ const ManageProducts = () => {
     {
       key: 'rating_rate',
       name: 'Rating'
-    }
+    },
+    {
+      key: 'action',
+      name: 'Action',
+      render: (row) => {
+        return (
+          <div className='flex gap-2'>
+            <Button style='gray' Icon={EditIcon} type='link' to={`/manage-products/edit/${row.id}`} containerClass={'hover:!text-blue-800 hover:!bg-blue-200'} />
+          </div>
+        )
+      }
+    },
+
   ]
+
+
   useEffect(() => {
     dispatch(getProductsData({ page, isPagination: true }))
   }, [dispatch, page])
+
+
   return (
     <AdminLayout title={'Manage Products'}>
+      <div className='flex justify-end mb-4'>
+        <Button
+        label={"Add Product"}
+        type='link'
+        to='/manage-products/add/'
+        style='black'
+        />
+      </div>
       <CustomTable
         columns={columns}
         data={data}

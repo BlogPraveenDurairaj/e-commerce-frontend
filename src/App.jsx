@@ -17,6 +17,10 @@ import AdminLogin from "./pages/admin/adminLogin/AdminLogin";
 import AdminProtectedRoute from "./components/UI/AdminProtected";
 import ManageProducts from "./pages/admin/manageProductsPage/ManageProducts";
 import { setAdminAuth } from "./slice/adminAuthSlice";
+import ManageOrders from "./pages/admin/manageOrdersPage/ManageOrders";
+import Dashboard from "./pages/admin/dashboard/Dashboard";
+import AddProduct from "./pages/admin/manageProductsPage/addProductPage/AddProduct";
+import UpdateProduct from "./pages/admin/manageProductsPage/updateProductPage/UpdateProduct";
 
 
 function App() {
@@ -35,7 +39,7 @@ function App() {
     restoreSession()
   }, [dispatch])
 
- 
+
   return (
     <div>
       <BrowserRouter>
@@ -59,9 +63,22 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path={`/orders/:id`} element={<ViewOrderContainer />} />
           </Route>
+          {/* admin */}
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route element={<AdminProtectedRoute />}>
+            <Route path="dashboard" element={<Dashboard />} />
+          </Route>
+          <Route element={<AdminProtectedRoute />}>
             <Route path="/manage-products" element={<ManageProducts />} />
+          </Route>
+          <Route element={<AdminProtectedRoute />}>
+            <Route path="/manage-products/add" element={<AddProduct />} />
+          </Route>
+          <Route element={<AdminProtectedRoute />}>
+            <Route path="/manage-products/edit/:id" element={<UpdateProduct />} />
+          </Route>
+          <Route element={<AdminProtectedRoute />}>
+            <Route path="manage-orders" element={<ManageOrders />} />
           </Route>
         </Routes>
       </BrowserRouter>

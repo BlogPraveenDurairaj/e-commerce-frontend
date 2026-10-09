@@ -1,34 +1,58 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import LoginSignupWrapper from '../../../components/UI/LoginSignupWrapper';
 import adminLoginSideImage from '../../../assets/admin-login.webp'
 import { useForm } from 'react-hook-form';
 import Input from '../../../components/UI/Input';
 import Button from '../../../components/UI/Button';
 import { supabase } from '../../../lib/supabaseClient';
-import { useDispatch } from 'react-redux';
-import { setAdminAuth } from '../../../slice/adminAuthSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { getRoleData, setAdminAuth } from '../../../slice/adminAuthSlice';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const AdminLogin = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const { isAuthenticated } = useSelector((state) => state.admin)
 
     const handleForm = async ({ email, password }) => {
-        setLoading(true)
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password
-        })
-        setLoading(false)
-        if (error) {
-            console.log(error, "Something went wrong")
-            return
+
+        try {
+            setLoading(true)
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: email,
+                password: password
+            })
+            const adminAccess = await dispatch(getRoleData({ user_id: data.user.id, access_token: data.session.access_token })).unwrap()
+            if (adminAccess) {
+                if (adminAccess?.role == 'admin') {
+                    dispatch(setAdminAuth(data))
+                    navigate('/dashboard')
+                }
+            }
+            if (error) {
+                toast.error("something went wrong")
+            }
+        } catch (err) {
+            const { error } = await supabase.auth.signOut()
+            if (error) {
+                console.log('logout failed')
+                return
+            }
+            toast.error("you have not access")
         }
-        dispatch(setAdminAuth(data))
-        navigate('/')
+        finally {
+            setLoading(false)
+        }
     }
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/dashboard')
+        }
+    }, [isAuthenticated])
 
     return (
         <LoginSignupWrapper panelImage={adminLoginSideImage}>
