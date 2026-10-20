@@ -10,19 +10,6 @@ import Select from '../../../components/UI/Select'
 import Button from '../../../components/UI/Button'
 
 const ManageOrders = () => {
-    //     {
-    //     "id": "9fa4af97-375c-4af9-975b-f29e1a547967",
-    //     "user_id": "2f404c69-40b8-4eb4-b44a-2cfa99898138",
-    //     "created_at": "2026-09-21T09:25:03.310395+00:00",
-    //     "total_amount": 69,
-    //     "status": "Placed",
-    //     "payment_method": "COD",
-    //     "shipping_name": "praveen durairaj",
-    //     "shipping_phone": "9345818731",
-    //     "shipping_address": "3/145, Adaikalampillai Colony",
-    //     "shipping_city": "MADURAI",
-    //     "shipping_pincode": "625009"
-    // }
     const dispatch = useDispatch();
     const { totalOrders, totalOrdersCount, loading } = useSelector((state) => state.orders)
     const [page, setPage] = useState(1)
@@ -99,7 +86,6 @@ const ManageOrders = () => {
     useEffect(() => {
         dispatch(getAllOrdersByAdminData(page))
     }, [dispatch, page])
-    console.log(totalOrders, 'totalOrders')
     return (
         <AdminLayout title={'Manage Orders'}>
             <CustomTable

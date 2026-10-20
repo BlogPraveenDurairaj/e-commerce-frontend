@@ -1,11 +1,11 @@
 import React from 'react'
 import { PaginationLimit } from '../../static'
 
-const TableSkeleton = ({titleLength}) => {
+const TableSkeleton = ({titleLength ,customSkeletonLength}) => {
     return (
         <>
             {
-                Array.from({ length: PaginationLimit },
+                Array.from({ length: customSkeletonLength ?? PaginationLimit },
                     (_, index) => (
                         <tr key={index} className="border-b border-gray-200 last:border-0 bg-white">
                             {

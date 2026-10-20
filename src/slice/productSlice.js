@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getProducts, getProductById, deleteProductByID, createProduct, updateProduct } from "../api/productApi";
+import { getProducts, getProductById, deleteProductByID, createProduct, updateProduct, getAllProducts } from "../api/productApi";
 import toast from "react-hot-toast";
-// get all product 
+// get product 
 export const getProductsData = createAsyncThunk('products/getProducts', async ({ page, category, sort, search, isPagination }, { rejectWithValue }) => {
 
     try {
@@ -12,6 +12,16 @@ export const getProductsData = createAsyncThunk('products/getProducts', async ({
 
     } catch (err) {
         return rejectWithValue(err.message || "something went wrong")
+    }
+})
+
+// get all products
+export const getAllProductsData = createAsyncThunk('products/getAll', async (_, { rejectWithValue }) => {
+    try {
+        const res = await getAllProducts()
+        return res.data
+    } catch (err) {
+        return rejectWithValue(err.message)
     }
 })
 
@@ -72,6 +82,7 @@ const productSlice = createSlice({
     initialState: {
         data: [],
         previewData: null,
+        allProductsData :[],
         page: 1,
         loading: {
             dataLoading: false,
@@ -137,18 +148,21 @@ const productSlice = createSlice({
             const { data, page, total, isPagination } = action.payload
             if (isPagination) {
                 state.data = data
+            } else if (page == 1) {
+                state.data = data
             } else {
-                if (page == 1) {
-                    state.data = data
-                } else {
-                    state.data.push(...data)
-                }
+                const existingIds = new Set(
+                    state.data.map((product) => product.id)
+                );
+                state.data.push(...data.filter((product) => !existingIds.has(product.id)))
             }
             state.page = page
-            state.hasMore = data.length > 0
+            state.hasMore = isPagination ? false : state.data.length < total;
             state.loading.dataLoading = false
             state.total = total
-        }).addCase(getProductsData.rejected, (state, action) => {
+        }
+
+        ).addCase(getProductsData.rejected, (state, action) => {
             state.loading.dataLoading = false
             state.error = action.payload
         })
@@ -177,13 +191,24 @@ const productSlice = createSlice({
             .addCase(updateProductData.pending, (state) => {
                 state.loading.updateLoading = true
             })
-            .addCase(updateProductData.fulfilled, (state,action) => {
+            .addCase(updateProductData.fulfilled, (state, action) => {
                 state.loading.updateLoading = false
-                state.data = state.data.map((item)=> item.id === action.payload.id  ? action.payload : item)
+                state.data = state.data.map((item) => item.id === action.payload.id ? action.payload : item)
             })
-            .addCase(updateProductData.rejected, (state,action) => {
+            .addCase(updateProductData.rejected, (state, action) => {
                 state.loading.updateLoading = false
                 state.error = action.payload
+            })
+            .addCase(getAllProductsData.pending,(state)=>{
+               state.loading.dataLoading = true
+            })
+            .addCase(getAllProductsData.fulfilled,(state,action)=>{
+               state.loading.dataLoading = false
+                state.allProductsData = action.payload
+            })
+            .addCase(getAllProductsData.rejected,(state,action)=>{
+               state.loading.dataLoading = true
+               state.error = action.payload
             })
     }
 })

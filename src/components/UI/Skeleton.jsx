@@ -1,7 +1,7 @@
 const Skeleton = ({
   width = "100%",
   height = "20px",
-  bgColor = "#e5e5e5",
+  bgColor = "#e8ebee",
   borderRadius = "5px",
   className = "",
 }) => {

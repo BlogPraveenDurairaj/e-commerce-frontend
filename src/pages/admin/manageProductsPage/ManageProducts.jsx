@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import CustomTable from '../../../components/UI/CustomTable'
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteProductData, getProductsData } from '../../../slice/productSlice'
+import { getProductsData } from '../../../slice/productSlice'
 import AdminLayout from '../../../components/layout/AdminLayout'
-import { DeleteIcon, EditIcon, Spinner } from '../../../assets/svgComponent/SvgIcon2'
+import { EditIcon } from '../../../assets/svgComponent/SvgIcon2'
 import Button from '../../../components/UI/Button'
-import Modal from '../../../components/UI/Modal'
 
 const ManageProducts = () => {
   const { data, error, loading, total } = useSelector((state) => state.products);
@@ -25,6 +24,14 @@ const ManageProducts = () => {
     {
       key: 'title',
       name: 'Product name'
+    },
+      {
+      key: 'availability',
+      name: 'Availability',
+      render:(row)=>{
+        return row.availability ? <span className='w-fit px-4 py-1 rounded-full text-sm bg-green-50 text-green-600'>Available</span> :
+        <span className='w-fit px-4 py-1 rounded-full text-sm  bg-red-50 text-red-600'>Not Available</span> 
+      }
     },
     {
       key: 'price',
@@ -77,6 +84,7 @@ const ManageProducts = () => {
         style='black'
         />
       </div>
+
       <CustomTable
         columns={columns}
         data={data}

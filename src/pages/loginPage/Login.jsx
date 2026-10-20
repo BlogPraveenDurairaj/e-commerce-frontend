@@ -27,7 +27,6 @@ const Login = () => {
         })
 
         if (error) {
-            console.log("Error user login", error)
             toast.error(error.message || "Something went wrong")
             return
         }

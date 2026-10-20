@@ -1,20 +1,21 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import cx from 'classnames';
+import { SideMenuCloseIcon } from '../../assets/svgComponent/SvgIcon2';
 
-const AdminSideMenu = ({ data }) => {
+const AdminSideMenu = ({ data, expand, setExpand }) => {
 
     return (
-        <aside className="w-64 min-h-screen border-r border-gray-200 bg-white  fixed left-0">
+        <aside className={cx("min-h-screen border-r border-gray-200 bg-white fixed left-0 z-20", expand ? "w-64" : "w-[84px]")}>
             {/* Logo */}
-            <div className="flex items-center gap-3 border-b p-4 border-gray-200">
+            <div className="flex items-center gap-3 border-b p-4 border-gray-200 h-16 relative">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-600 text-white">
                     <span className="text-lg font-bold">S</span>
                 </div>
-                <div>
-                    <h1 className="text-lg font-bold text-green-600">
-                        ShopEasy
-                    </h1>
-                </div>
+                {expand && <h1 className="text-lg font-bold text-green-600">
+                    ShopEasy
+                </h1>}
+                <button className='absolute -right-3 bg-white rounded-md text-sm border border-gray-100 text-black cursor-pointer' onClick={() => setExpand((pre) => !pre)}><SideMenuCloseIcon /></button>
             </div>
 
             {/* Menu */}
@@ -27,9 +28,10 @@ const AdminSideMenu = ({ data }) => {
                         <Link
                             key={item.link}
                             to={item.link}
-                            className={`group flex items-center gap-3 rounded-xl px-3 py-3 transition-all
+                            className={cx(`group flex items-center gap-3 rounded-xl  transition-all
             ${isActive ? "bg-green-600 text-white" : "text-gray-600 hover:bg-green-50 hover:text-green-600"}
-          `}
+          `, expand ? 'p-3' : 'p-2')}
+                            title={item.label}
                         >
                             {/* Icon */}
                             <div
@@ -41,7 +43,7 @@ const AdminSideMenu = ({ data }) => {
                             </div>
 
                             {/* Label + Description */}
-                            <div className="min-w-0 flex-1">
+                            {expand && <div className="min-w-0 flex-1">
                                 <p className="text-sm font-semibold">
                                     {item.label}
                                 </p>
@@ -56,7 +58,7 @@ const AdminSideMenu = ({ data }) => {
                                         {item.description}
                                     </p>
                                 )}
-                            </div>
+                            </div>}
 
                             {/* Badge */}
                             {item.count && (

@@ -1,7 +1,8 @@
 import React from 'react';
 import cx from 'classnames';
 
-const Pagination = (props) => {
+
+const Pagination = React.memo(function Pagination(props) {
     const { pageRange, page, handlePage } = props
     return (
         <div className="flex items-center justify-center gap-2 mt-6">
@@ -45,6 +46,7 @@ const Pagination = (props) => {
             </button>
         </div>
     )
-}
+})
+
 
 export default Pagination

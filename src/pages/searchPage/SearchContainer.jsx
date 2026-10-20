@@ -23,26 +23,20 @@ const SearchContainer = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        console.log(entries, 'entries')
-        console.log(entries[0].isIntersecting, !loading.dataLoading, hasMore)
         if (entries[0].isIntersecting && !loading.dataLoading && hasMore) {
           setPage((pre) => pre + 1)
-          console.log('isRuning')
         }
       }, {
       threshold: 0
     }
     )
     if (loaderRef.current) {
-      console.log(loaderRef.current, 'loaderRef.current')
       observer.observe(loaderRef.current)
     }
     return () => observer.disconnect()
   }, [loading.dataLoading, hasMore])
 
-  if (error) {
-    return <div className='p-5 text-red-600 font-semibold'>{error}</div>
-  }
+
 
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart.cartData))
@@ -54,6 +48,10 @@ const SearchContainer = () => {
 
   const isInitialLoading = loading.dataLoading && page === 1;
   const isLoadingMore = loading.dataLoading && page > 1;
+
+  if (error) {
+    return <div className='p-5 text-red-600 font-semibold'>{error}</div>
+  }
 
   return (
     <UserLayout isNotSearchPage={false}>

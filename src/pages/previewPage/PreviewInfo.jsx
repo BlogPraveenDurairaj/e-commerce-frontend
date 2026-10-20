@@ -4,9 +4,10 @@ import { handleCartAdd } from '../../slice/productSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { ProductCartSvgIcon, StarSvgIcon } from '../../assets/svgComponent/SvgIcon1'
 import Button from '../../components/UI/Button'
+import PreviewImage from './PreviewImage'
 
 const PreviewInfo = ({ data, isCardItem }) => {
-    const { category, description, image, price, title, rating_count, rating_rate } = data
+    const { category, description, price, title, rating_count, rating_rate } = data
     const { isAuthenticated } = useSelector((state) => state.auth)
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -25,9 +26,10 @@ const PreviewInfo = ({ data, isCardItem }) => {
     return (
         <div className='container-custom'>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                <div className='bg-[#f5f5f5] rounded-2xl p-5 flex items-center justify-center h-[250px] md:h-[400px]'>
-                    <img src={image} alt={title} className='w-full h-full object-contain' />
-                </div>
+                {data?.image && <div className='bg-[#f5f5f5] rounded-2xl p-5 flex items-center justify-center h-[250px] md:h-[400px]'>
+                    <img src={data.image} alt={title} className='w-full h-full object-contain' />
+                </div>}
+                {data?.images?.length > 0 && <PreviewImage imageData={data?.images} />}
                 <div>
                     <p className='px-4 py-1 bg-emerald-100 text-emerald-700 text-sm font-medium rounded-full inline-block mb-1.5'>{category}</p>
                     <p className='text-2xl md:text-3xl font-semibold mb-3 text-gray-800'>{title}</p>

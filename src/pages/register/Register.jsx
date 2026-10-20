@@ -32,8 +32,6 @@ const Register = () => {
         })
 
         if (error) {
-            
-            console.log("Error user not created", error)
             toast.error(error.message)
             return
         }

@@ -1,20 +1,21 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import TableSkeleton from '../skeleton/TableSkeleton';
 import { PaginationLimit } from '../../static';
 import Pagination from './Pagination';
 
 const CustomTable = (props) => {
-    const { loading, emptyMessage = "No data", data, columns, pagination } = props
+    const { loading, emptyMessage = "No data", data, columns, pagination ={} ,customSkeletonLength} = props
     const { page, setPage, total } = pagination
     const pageRange = Math.ceil(total / PaginationLimit)
 
-    const handlePage = (pageNo)=>{
+    const handlePage = useCallback((pageNo)=>{
         setPage(pageNo)
-    }
+    },[page])
 
+   
     return (
         <>
-            <div className="h-full w-full overflow-y-auto max-h-[650px] border border-gray-200 rounded-md">
+            <div className="w-full overflow-y-auto max-h-[650px] border border-gray-200 rounded-md">
                 <table className="w-full min-w-max table-auto text-left rounded-md relative">
                     <thead className="sticky top-0">
                         <tr className="leading-none font-medium text-sm border-b border-gray-200 p- bg-gray-100  min-w-[120px]">
@@ -22,7 +23,7 @@ const CustomTable = (props) => {
                         </tr>
                     </thead>
                     <tbody className='bg-white'>
-                        {loading && <TableSkeleton titleLength={columns.length} />}
+                        {loading && <TableSkeleton customSkeletonLength={customSkeletonLength} titleLength={columns.length} />}
                         {!loading && data?.length > 0 &&
                             data?.map((row) => {
                                 return (
@@ -42,7 +43,7 @@ const CustomTable = (props) => {
                 </table>
             </div>
             {/* pagination */}
-            {pageRange > 1 && <Pagination
+            {pagination  && pageRange > 1 && <Pagination
                 pageRange={pageRange}
                 page={page}
                 handlePage={handlePage}

@@ -10,6 +10,7 @@ import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Spinner } from '../../../assets/svgComponent/SvgIcon2'
+import { DeleteIconSvg, PlusIconSvg } from '../../../assets/svgComponent/SvgIcon1'
 
 const ProductForm = ({ data, type = "ADD", id }) => {
     const navigate = useNavigate()
@@ -17,13 +18,13 @@ const ProductForm = ({ data, type = "ADD", id }) => {
     const { loading } = useSelector((state) => state.products)
     const { register, control, formState: { errors }, handleSubmit, watch, reset } = useForm({
         defaultValues:
-            { images: [{ imageUrl: '', imageAltText: '' }] }
+            { images: [{ url: '', altText: '' }] }
     })
     const { fields, append, remove } = useFieldArray({
         control,
         name: 'images'
     })
-    
+
     const formData = watch()
     const basicInformation = [
         {
@@ -74,15 +75,23 @@ const ProductForm = ({ data, type = "ADD", id }) => {
             type: 'text',
             placeholder: 'Enter product rating count'
         },
+        {
+            name: 'best_seller',
+            label: 'Best Seller',
+            type: 'text',
+            inputType: 'select',
+            options: <>
+                <option value={false}>No</option>
+                <option value={true}>Yes</option>
+            </>,
+        },
     ]
 
     const handleForm = async (data) => {
         if (type == "ADD") {
             try {
                 const newProduct = {
-                    ...data,
-                    rating_rate: '0',
-                    rating_count: '0'
+                    ...data
                 }
                 const res = await dispatch(createProductData(newProduct)).unwrap()
                 if (res) {
@@ -92,14 +101,11 @@ const ProductForm = ({ data, type = "ADD", id }) => {
                 navigate('/manage-products')
             } catch (err) {
                 toast.error(err.message || 'something went wrong')
-                console.log(err)
             }
         } else {
             try {
                 const newProduct = {
-                    ...data,
-                    rating_rate: '0',
-                    rating_count: '0'
+                    ...data
                 }
                 const res = await dispatch(updateProductData({ id, data: newProduct })).unwrap()
                 if (res) {
@@ -109,7 +115,6 @@ const ProductForm = ({ data, type = "ADD", id }) => {
                 navigate('/manage-products')
             } catch (err) {
                 toast.error(err.message || 'something went wrong')
-                console.log(err)
             }
 
         }
@@ -156,28 +161,44 @@ const ProductForm = ({ data, type = "ADD", id }) => {
             </div>
             <div className='bg-white rounded-2xl p-5 mt-5 border border-gray-200'>
                 <h2 className="text-xl font-bold text-gray-800 mb-4">Product Images</h2>
-                <div className='grid grid-cols-2 gap-5 items-start'>
-                    <div className={cx('bg-gray-50 rounded-2xl min-h-[200px] flex justify-center items-center')}>
-                        {formData?.image ? <img src={formData?.image} alt={formData?.altText} /> : <div className='font-bold'>Upload Image</div>}
-                    </div>
-                    <div className='grid gap-4'>
-                        <Input
-                            label={"Image"}
-                            id={'Image'}
-                            placeholder={'Image url'}
-                            key={'Image'}
-                            error={errors["image"]?.message}
-                            {...register('image', { required: `${'image'} is required` })}
-                        />
-                        <Input
-                            label={"Alt text"}
-                            id={'Alt text'}
-                            placeholder={'Enter Alt text'}
-                            key={'Alt text'}
-                            error={errors["altText"]?.message}
-                            {...register('altText', { required: `${'Alt text'} is required` })}
-                        />
-                    </div>
+                <div className='grid gap-4'>
+                    {fields?.map((item, index) => {
+                        return (
+                            <div className='grid grid-cols-2 gap-5 items-start border border-gray-200 p-2 rounded-2xl' key={item.id}>
+                                <div className={cx('bg-gray-50 rounded-2xl flex justify-center items-center  h-[200px]')}>
+                                    {formData?.images[index].url ? <img src={formData?.images[index].url} alt={formData?.images[index].altText} className='object-contain h-full' /> : <div className='font-bold'>Upload Image</div>}
+                                </div>
+                                <div className='grid gap-4'>
+                                    <Input
+                                        label={`Image`}
+                                        id={'Image'}
+                                        placeholder={'Image url'}
+                                        key={'Image'}
+                                        error={errors[`images.${index}.url`]?.message}
+                                        {...register(`images.${index}.url`, { required: `${'image'} is required` })}
+                                    />
+
+                                    <Input
+                                        label={"Alt text"}
+                                        id={'Alt text'}
+                                        placeholder={'Enter Alt text'}
+                                        key={'Alt text'}
+                                        error={errors[`images.${index}.altText`]?.message}
+                                        {...register(`images.${index}.altText`, { required: `${'Alt text'} is required` })}
+                                    />
+                                    {!(index == 0) && 
+                                     <Button containerClass={'ms-auto'} buttonAction={() => remove(index)} label={'Remove'} Icon={DeleteIconSvg} style={'gray'} />}
+
+                                </div>
+
+                            </div>
+                        )
+                    })}
+
+
+                </div>
+                <div className='flex justify-end mt-3'>
+                    <Button buttonAction={() => append({ url: '', altText: '' })} Icon={PlusIconSvg} label={'Add Image'} style={'gray'} />
                 </div>
             </div>
             <div className='flex justify-end mt-5'>

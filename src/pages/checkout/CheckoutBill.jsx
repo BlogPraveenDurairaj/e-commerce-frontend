@@ -53,9 +53,6 @@ const CheckoutBill = ({ cartData }) => {
         const { data: { user: supabaseUser } } =
             await supabase.auth.getUser(session.access_token);
 
-        console.log("Supabase User ID:", supabaseUser?.id);
-        console.log("Redux User ID:", user?.id);
-
         const data = {
             ...orderDetails,
             total_amount: total,

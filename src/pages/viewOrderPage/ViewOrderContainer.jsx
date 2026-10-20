@@ -17,8 +17,6 @@ const ViewOrderContainer = () => {
         dispatch(getOrderDataById(id))
         dispatch(getOrderItemDataById(id))
     }, [dispatch])
-    console.log(viewOrder)
-
 
     return (
         <UserLayout>

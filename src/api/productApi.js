@@ -15,7 +15,7 @@ export const getProducts = (page = 1, category, sort = "asc", search = '') => {
         params.append("title", `ilike.%${search}%`)
     }
     if (sort) {
-        params.append("order", `price.${sort}`)
+        params.append("order", `price.${sort},id.asc`)
     }
     return api.get(`/products?${params.toString()}`, {
         headers: {
@@ -23,6 +23,7 @@ export const getProducts = (page = 1, category, sort = "asc", search = '') => {
         }
     })
 }
+export const getAllProducts = ()=> api.get('/products')
 
 export const getProductById = (id) => api.get(`/products?id=eq.${id}&select='*`)
 

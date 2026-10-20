@@ -2,13 +2,11 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { createOrder, getAllOrderItems, getAllOrders, getAllOrdersByAdmin, getOrderById, getOrderItemById, updateOrderStatus } from "../api/ordersApi"
 // create order
 export const createOrderData = createAsyncThunk('orders/createOrder', async ({ data, accessToken }, { rejectWithValue }) => {
-    console.log(data, accessToken)
     try {
         const res = await createOrder(data, accessToken)
         return res.data[0]
 
     } catch (err) {
-        console.log(err.response.data)
         return rejectWithValue(err.message)
 
     }
@@ -118,10 +116,15 @@ const orderSlice = createSlice({
             .addCase(getOrdersData.pending, (state) => {
                 state.loading = true
             })
+            .addCase(getAllOrderItemsData.pending, (state) => {
+                state.loading = true
+            })
             .addCase(getAllOrderItemsData.fulfilled, (state, action) => {
+                state.loading = false
                 state.orderItems = action.payload
             })
             .addCase(getAllOrderItemsData.rejected, (state, action) => {
+                state.loading = false
                 state.error = action.payload
             })
             .addCase(getOrderDataById.pending, (state) => {
@@ -150,7 +153,6 @@ const orderSlice = createSlice({
                 state.loading = true
             })
             .addCase(getAllOrdersByAdminData.fulfilled, (state, action) => {
-                console.log(action.payload, 'totalItem')
                 state.loading = false
                 state.totalOrders = action.payload.data
                 state.totalOrdersCount = action.payload.totalItem
@@ -161,7 +163,7 @@ const orderSlice = createSlice({
             })
             // update status
             .addCase(updateOrderStatusData.fulfilled, (state, action) => {
-                state.totalOrders = state.totalOrders.map((item)=> item.id === action.payload.id ? action.payload : item)
+                state.totalOrders = state.totalOrders.map((item) => item.id === action.payload.id ? action.payload : item)
             })
     }
 })
